@@ -1,3 +1,17 @@
+// Mobile Menu Toggle
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+
+if (mobileToggle && navLinks) {
+  mobileToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    // Optional: change icon to an 'X' when open
+    const icon = mobileToggle.querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-times');
+  });
+}
+
 // Carousel functionality
 const carouselTrack = document.getElementById('carouselTrack');
 const prevBtn = document.getElementById('prevBtn');
@@ -7,7 +21,7 @@ const carouselWrapper = document.querySelector('.carousel-wrapper');
 
 let currentPosition = 0;
 let cardsPerView = getCardsPerView();
-const totalCards = document.querySelectorAll('.carousel-card').length || 15;
+const totalCards = 3;
 let totalSlides = Math.ceil(totalCards / cardsPerView);
 let autoplayTimer = null;
 
@@ -19,6 +33,17 @@ let dragOffset = 0;
 let velocity = 0;
 let lastX = 0;
 let lastTime = 0;
+
+async function getproducts() {
+
+  const response = await fetch(
+    "https://whitesmoke-jaguar-842419.hostingersite.com/api/products",
+  );
+  const res = await response.json()
+  console.log(res);
+}
+
+
 
 function getCardsPerView() {
   const width = window.innerWidth;
@@ -142,7 +167,7 @@ if (carouselWrapper) {
     const dragPercentage = (dragOffset / carouselTrack.offsetWidth) * 100;
     carouselTrack.style.transform = `translateX(${baseOffset - dragPercentage}%)`;
   }, false);
-
+    
   window.addEventListener('pointerup', (e) => {
     if (!isDragging) return;
     isDragging = false;
