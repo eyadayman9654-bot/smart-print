@@ -116,6 +116,17 @@ function saveDashboardSettings(settings) {
   localStorage.setItem(dashboardSettingsKey, JSON.stringify(settings));
 }
 
+function isZeroValue(value) {
+  if (value === null || value === undefined) return false;
+  const normalized = String(value).trim().replace(/٠/g, '0');
+  return normalized === '0';
+}
+
+function containsDigit(value) {
+  if (value === null || value === undefined) return false;
+  return /[0-9٠-٩]/.test(String(value));
+}
+
 function applyRemoteSettings(settings) {
   if (!settings) return;
 
@@ -180,7 +191,7 @@ function applyDashboardSettings() {
       if (!card) return;
       const value = card.querySelector('span');
       const label = card.querySelector('small');
-      if (value) value.textContent = price.value || '';
+      if (value) value.textContent = !containsDigit(price.value) ? price.value || '' : '';
       if (label) label.textContent = price.label || '';
     });
   }
@@ -265,7 +276,9 @@ function createProductCard(product) {
 
   const price = document.createElement('div');
   price.className = 'card-stars';
-  price.textContent = product.price !== undefined && product.price !== null ? `${product.price} د.ك` : '';
+  price.textContent = product.price !== undefined && product.price !== null && !containsDigit(product.price)
+    ? String(product.price).trim()
+    : '';
 
   card.append(image, title, description);
   if (price.textContent) {
