@@ -18,10 +18,35 @@ function closeMobileMenu() {
 }
 
 if (mobileToggle && navLinks) {
-  mobileToggle.addEventListener('click', () => {
+  const shouldCloseMenu = (target) => {
+    const isMenuOpen = navLinks.classList.contains('active');
+    if (!isMenuOpen) return false;
+    return target instanceof Element && !navLinks.contains(target) && !mobileToggle.contains(target);
+  };
+
+  mobileToggle.addEventListener('click', (event) => {
+    event.stopPropagation();
     const isOpen = navLinks.classList.contains('active');
     setMobileMenuState(!isOpen);
   });
+
+  document.addEventListener('click', (event) => {
+    if (shouldCloseMenu(event.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  document.addEventListener('touchstart', (event) => {
+    if (shouldCloseMenu(event.target)) {
+      closeMobileMenu();
+    }
+  }, true);
+
+  document.addEventListener('pointerdown', (event) => {
+    if (shouldCloseMenu(event.target)) {
+      closeMobileMenu();
+    }
+  }, true);
 
   navLinks.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => {
