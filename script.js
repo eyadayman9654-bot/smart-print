@@ -2,13 +2,31 @@
 const mobileToggle = document.getElementById('mobileToggle');
 const navLinks = document.getElementById('navLinks');
 
+function setMobileMenuState(isOpen) {
+  if (!navLinks || !mobileToggle) return;
+
+  navLinks.classList.toggle('active', isOpen);
+  const icon = mobileToggle.querySelector('i');
+  if (!icon) return;
+
+  icon.classList.toggle('fa-bars', !isOpen);
+  icon.classList.toggle('fa-times', isOpen);
+}
+
+function closeMobileMenu() {
+  setMobileMenuState(false);
+}
+
 if (mobileToggle && navLinks) {
   mobileToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    // Optional: change icon to an 'X' when open
-    const icon = mobileToggle.querySelector('i');
-    icon.classList.toggle('fa-bars');
-    icon.classList.toggle('fa-times');
+    const isOpen = navLinks.classList.contains('active');
+    setMobileMenuState(!isOpen);
+  });
+
+  navLinks.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      closeMobileMenu();
+    });
   });
 }
 
@@ -121,6 +139,15 @@ function recalculateCarousel() {
   currentPosition = Math.min(currentPosition, totalSlides - 1);
 }
 
+function hasMeaningfulText(value) {
+  if (value === undefined || value === null) return false;
+
+  const normalized = String(value).trim();
+  if (!normalized) return false;
+
+  return !['blank', 'none', 'n/a', 'null', 'undefined', 'nth'].includes(normalized.toLowerCase());
+}
+
 function createProductCard(product) {
   const card = document.createElement('article');
   card.className = 'carousel-card';
@@ -139,17 +166,25 @@ function createProductCard(product) {
   const title = document.createElement('h3');
   title.textContent = product.title || 'خدمة طباعة';
 
-  const description = document.createElement('p');
-  description.textContent = product.description || '';
-
+  const descriptionText = hasMeaningfulText(product.description) ? String(product.description).trim() : '';
   const price = document.createElement('div');
   price.className = 'card-stars';
-  price.textContent = product.price !== undefined && product.price !== null ? `${product.price} د.ك` : '';
+  const hasPrice = product.price !== undefined && product.price !== null && product.price !== '' && product.price !== 0;
+  price.textContent = hasPrice ? `${product.price} د.ك` : '';
 
-  card.append(image, title, description);
-  if (price.textContent) {
-    card.appendChild(price);
+  const body = document.createElement('div');
+  body.className = 'card-body';
+  body.appendChild(title);
+
+  if (descriptionText) {
+    const description = document.createElement('p');
+    description.textContent = descriptionText;
+    body.appendChild(description);
   }
+
+  if (price.textContent) body.appendChild(price);
+
+  card.append(image, body);
 
   return card;
 }
@@ -224,13 +259,16 @@ function buildDots() {
   }
 }
 
+function getCarouselOffset() {
+  if (!totalCards || !cardsPerView) return 0;
+  return currentPosition * cardsPerView * (100 / totalCards);
+}
+
 function updateCarousel() {
   updateTrackSize();
   if (!carouselTrack || !totalCards) return;
-  // In RTL, a positive translateX moves the track right, showing items to the left
-  const offset = currentPosition * cardsPerView * (100 / totalCards);
-  carouselTrack.style.transform = `translateX(${offset}%)`;
-  
+  carouselTrack.style.transform = `translateX(${getCarouselOffset()}%)`;
+
   document.querySelectorAll('.dot').forEach((dot, i) => {
     dot.classList.toggle('active', i === currentPosition);
   });
@@ -315,10 +353,12 @@ if (carouselWrapper) {
     lastX = touchCurrentX;
     lastTime = now;
     
-    const baseOffset = currentPosition * cardsPerView * (100 / totalCards);
-    // dragPercentage must be relative to the track width for translateX(%) to be accurate
-    const dragPercentage = (dragOffset / carouselTrack.offsetWidth) * 100;
-    carouselTrack.style.transform = `translateX(${baseOffset - dragPercentage}%)`;
+    const baseOffset = getCarouselOffset();
+    const dragPercentage = (dragOffset / carouselWrapper.clientWidth) * 100;
+    // Increase drag responsiveness (so it feels faster).
+    const sensitivity = 1.15;
+    // In RTL, swipe directions feel inverted unless we flip the sign.
+    carouselTrack.style.transform = `translateX(${baseOffset + dragPercentage * sensitivity}%)`;
   }, false);
     
   window.addEventListener('pointerup', (e) => {
@@ -334,14 +374,12 @@ if (carouselWrapper) {
     const dragThreshold = 20;
     const momentumThreshold = 0.5;
     const diff = touchStartX - touchCurrentX;
-    
-    // Check if there's enough momentum or drag distance
-    // In RTL, dragging left (diff > 0) or negative velocity triggers nextSlide
+
     if (Math.abs(velocity) > momentumThreshold || Math.abs(diff) > dragThreshold) {
       if (diff > 0 || velocity < -momentumThreshold) {
-        nextSlide();
-      } else {
         prevSlide();
+      } else {
+        nextSlide();
       }
     } else {
       updateCarousel();

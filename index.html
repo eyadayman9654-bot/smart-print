@@ -13,7 +13,7 @@
       <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
         <i class="fas fa-bars"></i>
       </button>
-      <div class="navbar-brand"><img src="./img/WhatsApp Image 2026-06-09 at 4.45.27 PM.jpeg" alt="Smart Print Logo"></div>
+      <div class="navbar-brand"><img src="./img/malik.jpeg" alt="Smart Print Logo"></div>
       <nav class="nav-links" id="navLinks">
         <ul>
           <li><a href="#hero">الرئيسية</a></li>
@@ -27,8 +27,8 @@
   <main class="page-content">
     <section class="hero container" id="hero">
       <div class="hero-copy">
-        <h1>وجهتكم المتكاملة لجميع خدمات الطباعة والدعاية والإعلان</h1>
-        <p>نقدم جميع خدمات الطباعة والتصوير والدعاية والإعلان، تصميم وطباعة البانرات واللوحات الإعلانية، تنفيذ الدروع التذكارية والأوشحة، صناعة الأختام بمختلف أنواعها، وطباعة المذكرات والكتب والبروشورات والكروت، مع جودة عالية وسرعة في الإنجاز.</p>
+        <h1>كل ما يخص الطباعة في مكان واحد</h1>
+        <p>طباعة وتصوير، بانرات ولوحات إعلانية، دروع تذكارية، أوشحة، أختام، ومختلف المطبوعات الورقية بجودة عالية وسرعة في التنفيذ</p>
       </div>
 
       <div class="hero-visual">
@@ -64,22 +64,36 @@
 
     <section class="carousel-section container" id="services">
       <div class="carousel-container">
+        <div class="carousel-controls" aria-label="Carousel navigation">
+          <button class="carousel-btn prev-btn" id="prevBtn" aria-label="السابق">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          <button class="carousel-btn next-btn" id="nextBtn" aria-label="التالي">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        </div>
         <div class="carousel-wrapper">
           <div class="carousel-track" id="carouselTrack">
             <article class="carousel-card">
               <div class="card-image"><i class="fas fa-print"></i></div>
-              <h3>طباعة وتصوير</h3>
-              <p>طباعة أبيض وأسود وألوان للمذكرات، الكتب، الملفات، والكروت بجودة واضحة وسرعة في التسليم.</p>
+              <div class="card-body">
+                <h3>طباعة وتصوير</h3>
+                <p>طباعة أبيض وأسود وألوان للمذكرات، الكتب، الملفات، والكروت بجودة واضحة وسرعة في التسليم.</p>
+              </div>
             </article>
             <article class="carousel-card">
-              <div class="card-image"><i class="fas fa-bullhorn"></i></div>
-              <h3>دعاية وإعلان</h3>
-              <p>تصميم وطباعة بنرات، بروشورات، لوحات، وأوشحة للفعاليات والمتاجر والمناسبات.</p>
+              <div class="card-image card-image--photo"><img src="./img/WhatsApp Image 2026-06-09 at 4.45.27 PM.jpeg" alt="خدمة دعاية وإعلان"></div>
+              <div class="card-body">
+                <h3>دعاية وإعلان</h3>
+                <p>تصميم وطباعة بنرات، بروشورات، لوحات، وأوشحة للفعاليات والمتاجر والمناسبات.</p>
+              </div>
             </article>
             <article class="carousel-card">
               <div class="card-image"><i class="fas fa-award"></i></div>
-              <h3>دروع وأختام</h3>
-              <p>تنفيذ الدروع التذكارية والأختام بمختلف الأنواع مع تشطيب مرتب يناسب الاستخدام اليومي والهدايا.</p>
+              <div class="card-body">
+                <h3>دروع وأختام</h3>
+                <p>تنفيذ الدروع التذكارية والأختام بمختلف الأنواع مع تشطيب مرتب يناسب الاستخدام اليومي والهدايا.</p>
+              </div>
             </article>
           </div>
         </div>
@@ -114,9 +128,14 @@
     </div>
   </footer>
 
-  <a href="https://wa.me/96565683725" class="whatsapp-float" target="_blank">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+  <div class="floating-actions">
+    <a href="https://maps.google.com/?q=29.292616,47.973633" class="floating-action location-float" target="_blank" aria-label="الموقع على الخريطة">
+      <i class="fas fa-location-dot"></i>
+    </a>
+    <a href="https://wa.me/96565683725" class="whatsapp-float" target="_blank" aria-label="واتساب">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </div>
 
   <script src="script.js"></script>
 </body>
