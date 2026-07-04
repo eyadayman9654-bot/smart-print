@@ -43,6 +43,9 @@ let cardsPerView = getCardsPerView();
 let totalCards = carouselTrack ? carouselTrack.children.length : 0;
 let totalSlides = Math.max(1, Math.ceil(totalCards / cardsPerView));
 let autoplayTimer = null;
+let autoplayCooldownTimer = null;
+const autoplayCooldownMs = 3000;
+const autoplayIntervalMs = 3000;
 
 // Drag variables
 let isDragging = false;
@@ -294,10 +297,27 @@ function startAutoplay() {
   clearInterval(autoplayTimer);
   autoplayTimer = setInterval(() => {
     nextSlide();
-  }, 4000);
+  }, autoplayIntervalMs);
+}
+
+function clearAutoplayCooldown() {
+  if (autoplayCooldownTimer) {
+    clearTimeout(autoplayCooldownTimer);
+    autoplayCooldownTimer = null;
+  }
+}
+
+function resumeAutoplayAfterCooldown() {
+  clearAutoplayCooldown();
+  clearInterval(autoplayTimer);
+  autoplayCooldownTimer = setTimeout(() => {
+    autoplayCooldownTimer = null;
+    startAutoplay();
+  }, autoplayCooldownMs);
 }
 
 function resetAutoplay() {
+  clearAutoplayCooldown();
   clearInterval(autoplayTimer);
   startAutoplay();
 }
@@ -387,7 +407,7 @@ if (carouselWrapper) {
       updateCarousel();
     }
     
-    resetAutoplay();
+    resumeAutoplayAfterCooldown();
   }, false);
 
   window.addEventListener('pointercancel', (e) => {
@@ -397,6 +417,7 @@ if (carouselWrapper) {
     if (carouselWrapper.releasePointerCapture) {
       carouselWrapper.releasePointerCapture(e.pointerId);
     }
+    resumeAutoplayAfterCooldown();
   }, false);
 }
 
