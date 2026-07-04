@@ -355,8 +355,8 @@ if (carouselWrapper) {
     
     const baseOffset = getCarouselOffset();
     const dragPercentage = (dragOffset / carouselWrapper.clientWidth) * 100;
-    // Increase drag responsiveness (so it feels faster).
-    const sensitivity = 1.15;
+    const isMobile = window.innerWidth <= 768;
+    const sensitivity = isMobile ? 0.28 : 0.45;
     // In RTL, swipe directions feel inverted unless we flip the sign.
     carouselTrack.style.transform = `translateX(${baseOffset + dragPercentage * sensitivity}%)`;
   }, false);
@@ -369,7 +369,9 @@ if (carouselWrapper) {
       carouselWrapper.releasePointerCapture(e.pointerId);
     }
     
-    carouselTrack.style.transition = 'transform 0.4s ease-out';
+    const isMobile = window.innerWidth <= 768;
+    const transitionDuration = isMobile ? '1.1s' : '0.8s';
+    carouselTrack.style.transition = `transform ${transitionDuration} cubic-bezier(0.22, 1, 0.36, 1)`;
     
     const dragThreshold = 20;
     const momentumThreshold = 0.5;
