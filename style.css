@@ -359,7 +359,7 @@ body::before {
   text-align: center;
   color: #ffffff;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   min-height: 380px;
   height: 420px;
   display: flex;
@@ -371,9 +371,10 @@ body::before {
   overflow: hidden;
 }
 
-.carousel-card:hover {
-  transform: translateY(-8px) scale(1.03) rotate(1deg);
-  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.25);
+.carousel-card:hover,
+.carousel-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.2);
 }
 
 .carousel-card,
@@ -857,12 +858,13 @@ body::before {
   text-align: center;
   color: #0f172a;
   z-index: 3;
+  gap: 20px;
 }
 
 .printer-card span {
   font-size: 1.5rem;
   font-weight: 800;
-  margin-bottom: 0.25rem;
+  margin: 0;
 }
 
 .printer-card small {
@@ -1289,7 +1291,7 @@ body::before {
 .hero-feature {
   display: grid;
   justify-items: center;
-  gap: 0.2rem;
+  gap: 1rem;
   color: #ffffff;
   font-size: clamp(0.76rem, 0.94vw, 0.94rem);
   font-weight: 800;
@@ -1308,7 +1310,7 @@ body::before {
 
 /* tighten vertical gap between the first and second text spans (label and price) */
 .hero-feature span + span {
-  margin-top: 0.12rem;
+  margin-top: -0.7rem;
   display: block;
 }
 
